@@ -2,6 +2,7 @@ const puppeeter = require('puppeteer');
 const csv = require('csv-parser')
 const fs = require('fs')
 const results = [];
+const ObjectsToCsv = require('objects-to-csv');
 const dataArray = [];
 
 async function scrapFinviz(tickers) {
@@ -22,6 +23,15 @@ async function scrapFinviz(tickers) {
     //data.lastNews =  await page.$eval(`#news-table > tbody > tr:nth-child(1) > td:nth-child(2) > div > div.news-link-left > a`, e => e.innerText);
     //data.lastNewsDate = await page.$eval(`#news-table > tbody > tr:nth-child(1) > td:nth-child(1)`, e => e.innerText);
     dataArray.push(data); //TODO: right to scv here
+    
+    const csv = new ObjectsToCsv(dataArray);
+ 
+    // Save to file:
+    await csv.toDisk('./test.csv');
+   
+    // Return the CSV file as string:
+    console.log(await csv.toString());
+    
   };
   await browser.close();
   console.log(dataArray)
